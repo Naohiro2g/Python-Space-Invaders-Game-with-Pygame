@@ -1,4 +1,6 @@
-import pygame, sys, random
+import sys
+import random
+import pygame
 from game import Game
 
 pygame.init()
@@ -16,7 +18,7 @@ game_over_surface = font.render("GAME OVER", False, YELLOW)
 score_text_surface = font.render("SCORE", False, YELLOW)
 highscore_text_surface = font.render("HIGH-SCORE", False, YELLOW)
 
-screen = pygame.display.set_mode((SCREEN_WIDTH + OFFSET, SCREEN_HEIGHT + 2*OFFSET))
+screen = pygame.display.set_mode((SCREEN_WIDTH + OFFSET, SCREEN_HEIGHT + 2 * OFFSET))
 pygame.display.set_caption("Python Space Invaders")
 
 clock = pygame.time.Clock()
@@ -27,10 +29,10 @@ SHOOT_LASER = pygame.USEREVENT
 pygame.time.set_timer(SHOOT_LASER, 300)
 
 MYSTERYSHIP = pygame.USEREVENT + 1
-pygame.time.set_timer(MYSTERYSHIP, random.randint(4000,8000))
+pygame.time.set_timer(MYSTERYSHIP, random.randint(4000, 8000))
 
 while True:
-    #Checking for events
+    # Checking for events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -40,13 +42,13 @@ while True:
 
         if event.type == MYSTERYSHIP and game.run:
             game.create_mystery_ship()
-            pygame.time.set_timer(MYSTERYSHIP, random.randint(4000,8000))
+            pygame.time.set_timer(MYSTERYSHIP, random.randint(4000, 8000))
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE] and game.run == False:
+        if keys[pygame.K_SPACE] and not game.run:
             game.reset()
 
-    #Updating
+    # Updating
     if game.run:
         game.spaceship_group.update()
         game.move_aliens()
@@ -54,10 +56,10 @@ while True:
         game.mystery_ship_group.update()
         game.check_for_collisions()
 
-    #Drawing
+    # Drawing
     screen.fill(GREY)
 
-    #UI
+    # UI
     pygame.draw.rect(screen, YELLOW, (10, 10, 780, 780), 2, 0, 60, 60, 60, 60)
     pygame.draw.line(screen, YELLOW, (25, 730), (775, 730), 3)
 
@@ -66,10 +68,10 @@ while True:
     else:
         screen.blit(game_over_surface, (570, 740, 50, 50))
 
-    x = 50
+    X = OFFSET
     for life in range(game.lives):
-        screen.blit(game.spaceship_group.sprite.image, (x, 745))
-        x += 50
+        screen.blit(game.spaceship_group.sprite.image, (X, 745))
+        X += 50
 
     screen.blit(score_text_surface, (50, 15, 50, 50))
     formatted_score = str(game.score).zfill(5)
